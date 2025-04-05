@@ -36,9 +36,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
 
+    // remember state
     val navController = rememberNavController()
     val currentTitle = remember { mutableStateOf("Cybersecurity Basics") }
 
+    // general structure: top bar, content, bottom bar
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { SmallTopAppBar(title = currentTitle.value) },
@@ -49,7 +51,7 @@ fun MainScreen() {
             )
         }
     ) { innerPadding ->
-
+        // composable functions to call during navigation
         val graph =
             navController.createGraph(startDestination = Screen.Info.rout) {
                 composable(route = Screen.Query.rout) {

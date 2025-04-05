@@ -21,6 +21,7 @@ fun BottomNavigationBar(
         mutableIntStateOf(1)
     }
 
+    // items in navigation bar (title, icon, destination)
     val navigationItems = listOf(
         NavigationItem(
             title = "Quiz",
@@ -60,6 +61,7 @@ fun BottomNavigationBar(
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
+        // draw items, highlight selected
         navigationItems.forEachIndexed { index, item ->
             val isSelected = selectedNavigationIndex.intValue == index
             val textColor = if (isSelected) {
