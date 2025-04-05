@@ -2,11 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
     namespace = "com.example.navigationtest"
     compileSdk = 35
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         applicationId = "com.example.navigationtest"
@@ -40,7 +42,9 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.generativeai)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -58,3 +62,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+

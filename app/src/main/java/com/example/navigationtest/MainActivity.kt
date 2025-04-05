@@ -45,7 +45,7 @@ fun MainScreen() {
         val graph =
             navController.createGraph(startDestination = Screen.Overview.rout) {
                 composable(route = Screen.Query.rout) {
-                    QueryScreen()
+                    BakingScreen()
                 }
                 composable(route = Screen.Overview.rout) {
                     OverviewScreen()
