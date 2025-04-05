@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.navigationtest.LLMViewModel
 
 data class QuizQuestion(
     val question: String,
@@ -112,7 +111,7 @@ val securityQuestions = listOf(
 )
 
 @Composable
-fun QuizScreen(llmViewModel: LLMViewModel = viewModel()) {
+fun QuizScreen() {
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var userAnswer by remember { mutableStateOf("") }
     var score by remember { mutableIntStateOf(0) }
