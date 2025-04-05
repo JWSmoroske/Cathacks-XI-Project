@@ -1,5 +1,5 @@
 package com.example.navigationtest.screens
-
+/*
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -157,4 +157,4 @@ fun BakingScreen(
 @Composable
 fun BakingScreenPreview() {
     BakingScreen()
-}
+}*/
