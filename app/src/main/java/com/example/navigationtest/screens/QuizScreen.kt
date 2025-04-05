@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 data class QuizQuestion(
     val question: String,
@@ -153,12 +152,12 @@ fun QuizScreen() {
 
                 // Linear Progress Bar
                 LinearProgressIndicator(
-                    progress = progress,
+                    progress = { progress },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.primary
+                                            .fillMaxWidth()
+                                            .height(8.dp)
+                                            .padding(top = 8.dp),
+                    color = MaterialTheme.colorScheme.primary,
                 )
 
                 // Dots Indicator
