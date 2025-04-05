@@ -22,11 +22,6 @@ fun InfoScreen(){
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(
-            text = "Cybersecurity Best Practices",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
         BestPracticeCard(
             title = "1. Use Strong Passwords",
             description = "Create passwords that are at least 12 characters long and combine uppercase letters, lowercase letters, numbers, and symbols. Using a password manager can help you generate and securely store these passwords.",
