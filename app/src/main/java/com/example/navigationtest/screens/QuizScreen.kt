@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 data class QuizQuestion(
     val question: String,
@@ -113,14 +116,15 @@ val securityQuestions = listOf(
 fun QuizScreen() {
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var userAnswer by remember { mutableStateOf("") }
-    var score by remember { mutableIntStateOf(0) }
     var showFeedback by remember { mutableStateOf(false) }
     var quizCompleted by remember { mutableStateOf(false) }
+    val answeredCorrectly = remember { mutableStateListOf<Boolean>() }
 
     val questions = remember { securityQuestions.shuffled() }
     val progress = remember(currentQuestionIndex) {
         (currentQuestionIndex + 1).toFloat() / questions.size
     }
+    val score = answeredCorrectly.count { it }
 
     Column(
         modifier = Modifier
@@ -135,7 +139,6 @@ fun QuizScreen() {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                // Score and Progress Text
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -150,32 +153,34 @@ fun QuizScreen() {
                     )
                 }
 
-                // Linear Progress Bar
                 LinearProgressIndicator(
-                    progress = { progress },
+                    progress = progress,
                     modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(8.dp)
-                                            .padding(top = 8.dp),
-                    color = MaterialTheme.colorScheme.primary,
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .padding(top = 8.dp),
+                    color = MaterialTheme.colorScheme.primary
                 )
 
-                // Dots Indicator
+                // Updated dots indicator with correctness colors
                 Row(
                     modifier = Modifier.padding(vertical = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     repeat(questions.size) { index ->
+                        val isAnswered = index < answeredCorrectly.size
+                        val isCurrent = index == currentQuestionIndex
+                        val color = when {
+                            isAnswered -> if (answeredCorrectly[index]) Color(0xFF1B5E20) else Color(0xFFB71C1C)
+                            isCurrent -> MaterialTheme.colorScheme.primary
+                            else -> Color.LightGray
+                        }
+
                         Box(
                             modifier = Modifier
                                 .size(12.dp)
                                 .clip(CircleShape)
-                                .background(
-                                    if (index <= currentQuestionIndex)
-                                        MaterialTheme.colorScheme.primary
-                                    else
-                                        Color.LightGray
-                                )
+                                .background(color)
                         )
                     }
                 }
@@ -204,10 +209,25 @@ fun QuizScreen() {
                     modifier = Modifier.padding(bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    questions[currentQuestionIndex].answers.forEach { answer ->
+                    val currentQuestion = questions[currentQuestionIndex]
+                    val correctAnswer = currentQuestion.answers[currentQuestion.correctAnswerIndex]
+
+                    currentQuestion.answers.forEach { answer ->
+                        val isCorrectAnswer = answer == correctAnswer
+                        val isSelected = answer == userAnswer
+                        val showColors = showFeedback
+
                         Button(
-                            onClick = { userAnswer = answer },
-                            modifier = Modifier.fillMaxWidth()
+                            onClick = { if (!showFeedback) userAnswer = answer },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = !showFeedback,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = when {
+                                    showColors && isCorrectAnswer -> Color(0xFF1B5E20)  // Dark green
+                                    showColors && isSelected -> Color(0xFFB71C1C)       // Dark red
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
+                            )
                         ) {
                             Text(
                                 text = answer,
@@ -220,17 +240,16 @@ fun QuizScreen() {
 
                 Button(
                     onClick = {
-                        val correctAnswer = questions[currentQuestionIndex]
+                        val isCorrect = userAnswer == questions[currentQuestionIndex]
                             .answers[questions[currentQuestionIndex].correctAnswerIndex]
+                        answeredCorrectly.add(isCorrect)
                         showFeedback = true
-                        if (userAnswer.equals(correctAnswer, ignoreCase = true)) {
-                            score++
-                        }
                     },
                     enabled = userAnswer.isNotBlank() && !showFeedback
                 ) {
                     Text("Submit Answer")
                 }
+
 
                 if (showFeedback) {
                     val correctAnswer = questions[currentQuestionIndex]
@@ -246,7 +265,7 @@ fun QuizScreen() {
                             } else {
                                 "❌ Incorrect. The correct answer was: $correctAnswer"
                             },
-                            color = if (userAnswer.equals(correctAnswer, ignoreCase = true)) Color.Green else Color.Red,
+                            color = if (userAnswer.equals(correctAnswer, ignoreCase = true)) Color(0xFF1B5E20) else Color(0xFFB71C1C),
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
@@ -297,7 +316,7 @@ fun QuizScreen() {
                 Button(
                     onClick = {
                         currentQuestionIndex = 0
-                        score = 0
+                        answeredCorrectly.clear()
                         userAnswer = ""
                         showFeedback = false
                         quizCompleted = false
