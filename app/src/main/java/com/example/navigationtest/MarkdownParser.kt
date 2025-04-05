@@ -33,7 +33,7 @@ fun parseBasicMarkdown(input: String): AnnotatedString {
             when {
                 headingGroup != null -> {
                     // Add spacing above the heading
-                    append("\n\n")
+                    append("\n")
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.Bold,
@@ -43,7 +43,7 @@ fun parseBasicMarkdown(input: String): AnnotatedString {
                         append(headingGroup.value)
                     }
                     // Optional: no extra newline after header
-                    append("\n")
+                    //append("\n")
                 }
                 boldGroup != null -> {
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
