@@ -17,6 +17,7 @@ import androidx.navigation.createGraph
 import com.example.navigationtest.screens.BakingScreen
 import com.example.navigationtest.screens.OverviewScreen
 import com.example.navigationtest.screens.PracticesScreen
+import com.example.navigationtest.screens.QuizScreen
 import com.example.navigationtest.ui.theme.NavigationTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +49,7 @@ fun MainScreen() {
                     BakingScreen()
                 }
                 composable(route = Screen.Overview.rout) {
-                    OverviewScreen()
+                    QuizScreen()
                 }
                 composable(route = Screen.Practices.rout) {
                     PracticesScreen()
