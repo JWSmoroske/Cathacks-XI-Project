@@ -2,6 +2,7 @@ package com.example.navigationtest
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -33,8 +34,8 @@ fun BottomNavigationBar(
             route = Screen.Home.rout
         ),
         NavigationItem(
-            title = "Profile",
-            icon = Icons.Default.Person,
+            title = "Practices",
+            icon = Icons.Default.Info,
             route = Screen.Profile.rout
         ),
         NavigationItem(

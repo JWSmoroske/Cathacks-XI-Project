@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import com.example.navigationtest.screens.CartScreen
 import com.example.navigationtest.screens.HomeScreen
-import com.example.navigationtest.screens.ProfileScreen
+import com.example.navigationtest.screens.InfoScreen
 import com.example.navigationtest.ui.theme.NavigationTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,7 +51,7 @@ fun MainScreen() {
                     HomeScreen()
                 }
                 composable(route = Screen.Profile.rout) {
-                    ProfileScreen()
+                    InfoScreen()
                 }
             }
         NavHost(
