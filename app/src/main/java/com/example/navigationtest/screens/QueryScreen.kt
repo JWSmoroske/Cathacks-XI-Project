@@ -19,15 +19,15 @@ import parseBasicMarkdown
 
 @Composable
 fun QueryScreen(
-    bakingViewModel: QueryViewModel = viewModel()
+    queryViewModel: QueryViewModel = viewModel()
 ) {
-    val uiState by bakingViewModel.uiState.collectAsState()
+    val uiState by queryViewModel.uiState.collectAsState()
     val promptContext = stringResource(R.string.prompt_context)
 
     var prompt by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
-
     val isLoading = uiState is UiState.Loading
+
 
     when (uiState) {
         is UiState.Loading -> {
@@ -50,18 +50,32 @@ fun QueryScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        OutlinedTextField(
-            value = prompt,
-            onValueChange = { prompt = it },
-            label = { Text(stringResource(R.string.label_prompt)) },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            if (prompt.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.placeholder_prompt),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp, top = 12.dp)
+                )
+            }
+
+            OutlinedTextField(
+                value = prompt,
+                onValueChange = { prompt = it },
+                //label = { Text(stringResource(R.string.label_prompt)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
                 val completePrompt = promptContext + prompt
-                bakingViewModel.sendPrompt(completePrompt)
+                queryViewModel.sendPrompt(completePrompt)
             },
             enabled = prompt.isNotEmpty(),
             modifier = Modifier
