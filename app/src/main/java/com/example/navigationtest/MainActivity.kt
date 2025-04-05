@@ -8,14 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
-import com.example.navigationtest.screens.OverviewScreen
-import com.example.navigationtest.screens.PracticesScreen
+import com.example.navigationtest.screens.QuizScreen
+import com.example.navigationtest.screens.InfoScreen
 import com.example.navigationtest.screens.QueryScreen
 import com.example.navigationtest.ui.theme.NavigationTestTheme
 
@@ -35,23 +37,29 @@ class MainActivity : ComponentActivity() {
 fun MainScreen() {
 
     val navController = rememberNavController()
+    val currentTitle = remember { mutableStateOf("Cybersecurity Basics") }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        bottomBar = { BottomNavigationBar(navController) }
+        modifier = Modifier.fillMaxSize(),
+        topBar = { SmallTopAppBar(title = currentTitle.value) },
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onTitleChange = { currentTitle.value = it }
+            )
+        }
     ) { innerPadding ->
 
         val graph =
-            navController.createGraph(startDestination = Screen.Overview.rout) {
+            navController.createGraph(startDestination = Screen.Info.rout) {
                 composable(route = Screen.Query.rout) {
                     QueryScreen()
                 }
-                composable(route = Screen.Overview.rout) {
-                    OverviewScreen()
+                composable(route = Screen.Quiz.rout) {
+                    QuizScreen()
                 }
-                composable(route = Screen.Practices.rout) {
-                    PracticesScreen()
+                composable(route = Screen.Info.rout) {
+                    InfoScreen()
                 }
             }
         NavHost(
