@@ -14,9 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
+import com.example.navigationtest.screens.BakingScreen
 import com.example.navigationtest.screens.OverviewScreen
 import com.example.navigationtest.screens.PracticesScreen
-import com.example.navigationtest.screens.QueryScreen
 import com.example.navigationtest.ui.theme.NavigationTestTheme
 
 class MainActivity : ComponentActivity() {

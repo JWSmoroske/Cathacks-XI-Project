@@ -1,4 +1,4 @@
-package com.example.navigationtest
+package com.example.navigationtest.screens
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
@@ -37,6 +37,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.navigationtest.BakingViewModel
+import com.example.navigationtest.R
+import com.example.navigationtest.UiState
 
 val images = arrayOf(
     // Image generated using Gemini from the prompt "cupcake image"
