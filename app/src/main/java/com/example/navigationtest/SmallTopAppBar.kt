@@ -24,7 +24,8 @@ fun SmallTopAppBar(title: String) {
             Text(
                 title,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.headlineMedium
             )
         },
         scrollBehavior = scrollBehavior,
