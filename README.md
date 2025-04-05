@@ -6,16 +6,17 @@ CIAI is an all-in-one Android app that helps users become educated on cybersecur
 - AI powered cybersecurity assistant
 - Quiz yourself on cybersecurity topics
 
-# Why
-CIAI was our first step into native app development, and our first experience with Kotlin programming. 
+# Why CIAI?
+CIAI was our first step into native app development, and our first experience with Kotlin programming.
+It was also an opportunity to realize our skills in a different context (AI integration, UI/UX design, etc.).
 
 # Build & View
-1. Import project into Android Studio
+1. Import project into [Android Studio](https://developer.android.com/studio)
 2. Build using gradle
 3. Deploy to physical or emulated phone
-4. Run 'CIAI' and view on phone
+4. Run 'CIAI' and view on the device
 
 # Future Ideas
-- Improved information pool
+- Larger information pool
 - Increased quiz question pool
 - Further app polish
