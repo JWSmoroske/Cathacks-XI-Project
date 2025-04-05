@@ -1,5 +1,5 @@
 # Overview
-CIAI is an all-in-one Android app that helps users become educated on cybersecurity practices.
+CyberInfo AI (CIAI) is an all-in-one Android app that helps users become educated on cybersecurity practices.
 
 # Features
 - Educational resources to learn about cybersecurity
