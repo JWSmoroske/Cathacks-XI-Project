@@ -14,9 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
-import com.example.navigationtest.screens.CartScreen
-import com.example.navigationtest.screens.HomeScreen
-import com.example.navigationtest.screens.ProfileScreen
+import com.example.navigationtest.screens.OverviewScreen
+import com.example.navigationtest.screens.PracticesScreen
+import com.example.navigationtest.screens.QueryScreen
 import com.example.navigationtest.ui.theme.NavigationTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,15 +43,15 @@ fun MainScreen() {
     ) { innerPadding ->
 
         val graph =
-            navController.createGraph(startDestination = Screen.Home.rout) {
-                composable(route = Screen.Cart.rout) {
-                    CartScreen()
+            navController.createGraph(startDestination = Screen.Overview.rout) {
+                composable(route = Screen.Query.rout) {
+                    QueryScreen()
                 }
-                composable(route = Screen.Home.rout) {
-                    HomeScreen()
+                composable(route = Screen.Overview.rout) {
+                    OverviewScreen()
                 }
-                composable(route = Screen.Profile.rout) {
-                    ProfileScreen()
+                composable(route = Screen.Practices.rout) {
+                    PracticesScreen()
                 }
             }
         NavHost(

@@ -9,13 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CartScreen(){
+fun OverviewScreen(){
     Box (modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "Cart Screen",
+            text = "Home Screen",
             style = MaterialTheme.typography.headlineLarge
         )
     }
