@@ -9,38 +9,40 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController
+    navController: NavController,
+    onTitleChange: (String) -> Unit
 ) {
     val selectedNavigationIndex = rememberSaveable {
-        mutableIntStateOf(0)
+        mutableIntStateOf(1)
     }
 
     val navigationItems = listOf(
         NavigationItem(
-            title = "Overview",
+            title = "Quiz",
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_description_24),
+                    painter = painterResource(id = R.drawable.baseline_quiz_24),
                     contentDescription = "Overview"
                 )
             },
-            route = Screen.Overview.rout
+            route = Screen.Quiz.rout,
+            description = "Quiz Yourself"
         ),
         NavigationItem(
-            title = "Practices",
+            title = "Info",
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_info_outline_24),
                     contentDescription = "Practices"
                 )
             },
-            route = Screen.Practices.rout
+            route = Screen.Info.rout,
+            description = "Cybersecurity Basics"
         ),
         NavigationItem(
             title = "Ask",
@@ -50,19 +52,27 @@ fun BottomNavigationBar(
                     contentDescription = "Ask"
                 )
             },
-            route = Screen.Query.rout
+            route = Screen.Query.rout,
+            description = "Ask Anything"
         )
     )
 
     NavigationBar(
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
         navigationItems.forEachIndexed { index, item ->
+            val isSelected = selectedNavigationIndex.intValue == index
+            val textColor = if (isSelected) {
+                MaterialTheme.colorScheme.onPrimaryContainer // Selected
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant // Unselected
+            }
             NavigationBarItem(
-                selected = selectedNavigationIndex.intValue == index,
+                selected = isSelected,
                 onClick = {
                     selectedNavigationIndex.intValue = index
                     navController.navigate(item.route)
+                    onTitleChange(item.description)
                 },
                 icon = {
                     item.icon()
@@ -70,13 +80,12 @@ fun BottomNavigationBar(
                 label = {
                     Text(
                         item.title,
-                        color = if (index == selectedNavigationIndex.intValue)
-                            Color.Black
-                        else Color.Gray
+                        color = textColor
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.surface,
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     indicatorColor = MaterialTheme.colorScheme.primary
                 )
 
@@ -88,5 +97,6 @@ fun BottomNavigationBar(
 data class NavigationItem(
     val title: String,
     val icon: @Composable () -> Unit,
-    val route: String
+    val route: String,
+    val description: String
 )
