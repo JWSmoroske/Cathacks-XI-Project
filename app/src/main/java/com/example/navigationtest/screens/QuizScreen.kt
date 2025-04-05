@@ -112,20 +112,27 @@ val securityQuestions = listOf(
     )
 )
 
+/**
+ * Main composable for the quiz screen
+ * Handles quiz flow, question display, answer selection, and progress tracking
+ */
 @Composable
 fun QuizScreen() {
-    var currentQuestionIndex by remember { mutableIntStateOf(0) }
-    var userAnswer by remember { mutableStateOf("") }
-    var showFeedback by remember { mutableStateOf(false) }
-    var quizCompleted by remember { mutableStateOf(false) }
-    val answeredCorrectly = remember { mutableStateListOf<Boolean>() }
+    // State management variables
+    var currentQuestionIndex by remember { mutableIntStateOf(0) } // Tracks current question index
+    var userAnswer by remember { mutableStateOf("") }             // Stores the user's selected answer
+    var showFeedback by remember { mutableStateOf(false) }        // Controls feedback visibility
+    var quizCompleted by remember { mutableStateOf(false) }       // Flag for quiz completion state
+    val answeredCorrectly = remember { mutableStateListOf<Boolean>() } // Tracks correctness of answers
 
-    val questions = remember { securityQuestions.shuffled() }
-    val progress = remember(currentQuestionIndex) {
+    // Quiz setup
+    val questions = remember { securityQuestions.shuffled() } // Randomize question order
+    val progress = remember(currentQuestionIndex) {           // Calculate progress percentage
         (currentQuestionIndex + 1).toFloat() / questions.size
     }
-    val score = answeredCorrectly.count { it }
+    val score = answeredCorrectly.count { it }                // Calculate current score
 
+    // Main layout column
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -133,49 +140,37 @@ fun QuizScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (!quizCompleted) {
-            // Progress Section
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-            ) {
+            // ================== Progress Section ==================
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+                // Score and question counter
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = "Correct: $score/${questions.size}",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "${currentQuestionIndex + 1}/${questions.size}",
-                        color = Color.Gray
-                    )
+                    Text(text = "Correct: $score/${questions.size}", color = MaterialTheme.colorScheme.primary)
+                    Text(text = "${currentQuestionIndex + 1}/${questions.size}", color = Color.Gray)
                 }
 
+                // Linear progress bar
                 LinearProgressIndicator(
                     progress = progress,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .padding(top = 8.dp),
+                    modifier = Modifier.fillMaxWidth().height(8.dp).padding(top = 8.dp),
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                // Updated dots indicator with correctness colors
-                Row(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                // Progress dots indicator
+                Row(modifier = Modifier.padding(vertical = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     repeat(questions.size) { index ->
                         val isAnswered = index < answeredCorrectly.size
                         val isCurrent = index == currentQuestionIndex
+                        // Determine dot color based on answer state
                         val color = when {
                             isAnswered -> if (answeredCorrectly[index]) Color(0xFF1B5E20) else Color(0xFFB71C1C)
                             isCurrent -> MaterialTheme.colorScheme.primary
                             else -> Color.LightGray
                         }
 
+                        // Individual progress dot
                         Box(
                             modifier = Modifier
                                 .size(12.dp)
@@ -186,18 +181,20 @@ fun QuizScreen() {
                 }
             }
 
-            // Question and Answers
+            // ================== Question & Answers Section ==================
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Quiz title
                 Text(
                     text = "Security & Ethics Quiz",
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
+                // Current question text
                 Text(
                     text = questions[currentQuestionIndex].question,
                     style = MaterialTheme.typography.bodyLarge,
@@ -205,10 +202,8 @@ fun QuizScreen() {
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
-                Column(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                // Answer buttons
+                Column(modifier = Modifier.padding(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     val currentQuestion = questions[currentQuestionIndex]
                     val correctAnswer = currentQuestion.answers[currentQuestion.correctAnswerIndex]
 
@@ -217,15 +212,16 @@ fun QuizScreen() {
                         val isSelected = answer == userAnswer
                         val showColors = showFeedback
 
+                        // Answer button with conditional coloring
                         Button(
                             onClick = { if (!showFeedback) userAnswer = answer },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !showFeedback,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = when {
-                                    showColors && isCorrectAnswer -> Color(0xFF1B5E20)  // Dark green
-                                    showColors && isSelected -> Color(0xFFB71C1C)       // Dark red
-                                    else -> MaterialTheme.colorScheme.primary
+                                    showColors && isCorrectAnswer -> Color(0xFF1B5E20)  // Dark green for correct
+                                    showColors && isSelected -> Color(0xFFB71C1C)       // Dark red for incorrect
+                                    else -> MaterialTheme.colorScheme.primary          // Default color
                                 }
                             )
                         ) {
@@ -238,6 +234,7 @@ fun QuizScreen() {
                     }
                 }
 
+                // Submit answer button
                 Button(
                     onClick = {
                         val isCorrect = userAnswer == questions[currentQuestionIndex]
@@ -250,7 +247,7 @@ fun QuizScreen() {
                     Text("Submit Answer")
                 }
 
-
+                // Feedback section
                 if (showFeedback) {
                     val correctAnswer = questions[currentQuestionIndex]
                         .answers[questions[currentQuestionIndex].correctAnswerIndex]
@@ -259,16 +256,19 @@ fun QuizScreen() {
                         modifier = Modifier.padding(vertical = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // Result feedback
                         Text(
                             text = if (userAnswer.equals(correctAnswer, ignoreCase = true)) {
                                 "✅ Correct! Well done!"
                             } else {
                                 "❌ Incorrect. The correct answer was: $correctAnswer"
                             },
-                            color = if (userAnswer.equals(correctAnswer, ignoreCase = true)) Color(0xFF1B5E20) else Color(0xFFB71C1C),
+                            color = if (userAnswer.equals(correctAnswer, ignoreCase = true))
+                                Color(0xFF1B5E20) else Color(0xFFB71C1C),
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
+                        // Detailed explanation
                         Text(
                             text = "Explanation: ${questions[currentQuestionIndex].explanation}",
                             style = MaterialTheme.typography.bodySmall,
@@ -276,6 +276,7 @@ fun QuizScreen() {
                             textAlign = TextAlign.Center
                         )
 
+                        // Navigation button (Next Question/Finish Quiz)
                         Button(
                             onClick = {
                                 if (currentQuestionIndex < questions.size - 1) {
@@ -294,18 +295,20 @@ fun QuizScreen() {
                 }
             }
         } else {
-            // Quiz Complete Screen
+            // ================== Quiz Completion Screen ==================
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Completion message
                 Text(
                     text = "Quiz Complete!",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
+                // Final score display
                 Text(
                     text = "Final Score: $score/${questions.size}",
                     style = MaterialTheme.typography.headlineSmall,
@@ -313,6 +316,7 @@ fun QuizScreen() {
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
+                // Restart quiz button
                 Button(
                     onClick = {
                         currentQuestionIndex = 0

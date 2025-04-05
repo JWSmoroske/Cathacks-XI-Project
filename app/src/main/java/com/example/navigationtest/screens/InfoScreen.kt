@@ -14,14 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * Screen displaying cybersecurity best practices in a scrollable list of cards.
+ * Provides actionable security advice with examples for each practice.
+ */
 @Composable
-fun InfoScreen(){
+fun InfoScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState())  // Enable scrolling for long content
             .padding(16.dp)
     ) {
+        // List of security best practices displayed in cards
         BestPracticeCard(
             title = "1. Use Strong Passwords",
             description = "Create passwords that are at least 12 characters long and combine uppercase letters, lowercase letters, numbers, and symbols. Using a password manager can help you generate and securely store these passwords.",
@@ -60,29 +65,41 @@ fun InfoScreen(){
     }
 }
 
+/**
+ * Reusable card component for displaying security best practices.
+ *
+ * @param title The practice title/numbering
+ * @param description Detailed explanation of the security practice
+ * @param example Concrete example of implementing the practice
+ */
 @Composable
 fun BestPracticeCard(title: String, description: String, example: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)  // Add subtle shadow for depth
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            // Practice title with emphasized typography
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+
+            // Detailed description of the practice
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+
+            // Example implementation in accent color
             Text(
                 text = example,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary  // Use theme color for emphasis
             )
         }
     }
